@@ -36,11 +36,9 @@ const reactionSchema = new Schema<IReaction>(
         createdAt: {
             type: Date,
             default: Date.now 
+
         }
-    },
-    {
-        timestamps: true,
-        _id: false
+        
     }
 );
 
