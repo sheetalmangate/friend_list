@@ -6,14 +6,34 @@ interface IUser extends Document {
     email: string;
     thoughts: ObjectId[];
     friends: ObjectId[];
+    friendCount?:number
 }
 
 const userSchema = new Schema<IUser>(
     {
-        username: { type: String, required: true, unique: true, trim: true },
-        email: { type: String, required: true, unique: true, },
-        thoughts: [{type: Schema.Types.ObjectId, ref: 'thought' }],
-        friends: [{type: Schema.Types.ObjectId, ref: 'user'}]
+        username: { 
+            type: String, 
+            required: true, 
+            unique: true, 
+            trim: true 
+        },
+        email: { 
+            type: String, 
+            required: true, 
+            unique: true 
+        },
+        thoughts: [
+            {
+                type: Schema.Types.ObjectId, 
+                ref: 'thought' 
+            }
+        ],
+        friends: [
+            {
+                type: Schema.Types.ObjectId, 
+                ref: 'user'
+            }
+        ]
     },
     {
         toJSON: {
@@ -25,8 +45,12 @@ const userSchema = new Schema<IUser>(
 );
 
 // Create a virtual property `friendCount ` that gets the number of friendCount for user
-userSchema.virtual('friendCount').get(function () {
+userSchema.virtual('friendCount')
+.get(function () {
     return this.friends?.length;
+})
+.set(function(friends) {
+    this.friendCount = friends.length;
 });
 
 //Initialize user model
